@@ -1,0 +1,32 @@
+TABLE	DCD		0xDEADFEED, 0xC0DEC0DE, 0xCAFEBABE, 0xB105F00D, 0xBAAAAAAD
+TAILLE	EQU		5
+		ADR		R0, TABLE
+		ADR		R1, TAILLE
+		ADR		R2, TAILLE
+		SUB		R2, R2, #1
+		MOV		R5, #0
+loop
+		MOV		R6, R5
+		MOV		R7, R5
+		ADD		R7, R7,#1
+loop2
+		LDR		R8, [r0, r7, LSL #2]
+		LDR		R9, [r0, r6, LSL #2]
+		CMP		R8,R9
+		BGT		if
+		MOV		R6, R7
+if
+		ADD		R7,R7, #1
+		CMP		R7, R1
+		BNE		loop2
+		CMP		R6,R5
+		BEQ		if2
+		LDR		R10, [r0, r5, LSL #2]
+		LDR		R11, [r0, r6, LSL #2]
+		STR		R10, [r0, r6, LSL #2]
+		STR		R11, [R0, R5, LSL #2]
+if2
+		ADD		R5, R5, #1
+		CMP		R5, R2
+		BNE		loop
+		end
